@@ -17,32 +17,38 @@ The demographic is targeted towards anyone who is planning on doing gift shoppin
 ### Data Usage
 I plan to use url data, and user data. The url data will be manually entered into the system for this project's scope, whereas user data will be collected during user sign up and login.
 
-I implement Pocket API to ‘bookmark’ links that the user saves. This requires authorization from Pocket API using a user token, which will be stored in the user's session.
+I implement my own API to ‘bookmark’ links that the user saves. This requires a wishlistID endpoint, which will be accessed from the UserList table or (for friends) through the Friendship table, which will give them access to the userID of the friend they are shopping for, which will then allow them to use the UserList table to get that friend's wishlistID.
 
 ## Project Approach
 ### Database Schema
-The database will have two primary tables: Users and Friendships. The Users table will include fields like user ID, name, email, and password (hashed and salted for security), and user token ? . The Friendships table will contain requestUserID, userID, approved.
+The database will have two primary tables: Users and Friendships. The Users table will include fields like user ID, name, username, and password (hashed and salted for security). The Friendships table will contain requestFromUserID, requestToUserID, approved.
 
 ```
 Users Table:
-+---------+-------+-------+----------+---------+-------+
-| userID  | name  | email | password | address | token |
-+---------+-------+-------+----------+---------+-------+
++---------+----------+----------+----------+
+| userID  | fullName | username | password |
++---------+----------+----------+----------+
 
-//below needed if using pocket?
-<!-- Wishlists Table:
-+-----------+------+-------------+---------+
-| wishlistID | name | description | userID |
-+-----------+------+-------------+---------+ -->
+UserList Table: 
+//through table to store users wishlist ids to request from API
++---------+------------+
+| userID  | wishlistID |
++---------+------------+
+
+Wishlists Table:
+//accessed data from API
++------------+----------+-------------+--------+
+| wishlistID | itemName | description | userID |
++------------+----------+-------------+--------+ 
 
 Friendships Table:
-+--------------+--------+----------+
-| requestUserID| userID | approved | 
-+--------------+--------+----------+
++------------------+-----------------+----------+
+| requestFromUserID| requestToUserID | approved | 
++------------------+-----------------+----------+
 ```
 
 ### Potential API Issues
-I am using Pocket API to store URL bookmarks so potential issues might include handling Oauth2 implementation as well as keeping user lists organized and secure. I will implement testing and thoroughly read the documentation before I begin to design database schema.
+I am creating my own API to store user's wishlists. Issues might include organizing filestructures to keep API clean or issues accessing data using ORMs.
 
 ### Security of Sensitive Information
 The only sensitive information being stored are passwords. Passwords will be hashed and salted using and all data transfers will be secure through HTTPS.
