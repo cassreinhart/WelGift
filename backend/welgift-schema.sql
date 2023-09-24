@@ -6,8 +6,7 @@ COMMENT ON DOMAIN weburl IS 'match URLs (http or https)';
 CREATE TABLE users (
   username VARCHAR(25) PRIMARY KEY,
   hashed_password TEXT NOT NULL,
-  first_name TEXT NOT NULL,
-  last_name TEXT NOT NULL
+  full_name TEXT NOT NULL
 );
 
 CREATE TABLE friendships (

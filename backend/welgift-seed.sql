@@ -1,18 +1,15 @@
 -- all test users have the password "password"
 
-INSERT INTO users (username, hashed_password, first_name, last_name)
+INSERT INTO users (username, hashed_password, full_name)
 VALUES ('testuser1',
         '$2b$12$AZH7virni5jlTTiGgEg4zu3lSvAw68qVEfSIOjJ3RqtbJbdW/Oi5q',
-        'Test',
-        'User1'),
+        'Test User1'),
        ('testuser2',
         '$2b$12$AZH7virni5jlTTiGgEg4zu3lSvAw68qVEfSIOjJ3RqtbJbdW/Oi5q',
-        'Test',
-        'User2'),
+        'Test User2'),
         ('testuser3',
         '$2b$12$AZH7virni5jlTTiGgEg4zu3lSvAw68qVEfSIOjJ3RqtbJbdW/Oi5q',
-        'Test',
-        'User3');
+        'Test User3');
 
 INSERT INTO friendships (request_from_username, request_to_username, approved)
 VALUES ('testuser1', 'testuser2', true),

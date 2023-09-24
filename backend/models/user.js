@@ -89,6 +89,11 @@ class User {
 
         return result.rows;
     }
+
+    /** Given a username, return data about a user.
+     * 
+     * Returns { username, full_name, ... ???}
+     */
 }
 
 module.exports = User;
