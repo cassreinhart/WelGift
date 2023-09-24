@@ -12,7 +12,7 @@ VALUES ('testuser1',
         ('testuser3',
         '$2b$12$AZH7virni5jlTTiGgEg4zu3lSvAw68qVEfSIOjJ3RqtbJbdW/Oi5q',
         'Test',
-        'User3'),;
+        'User3');
 
 INSERT INTO friendships (request_from_username, request_to_username, approved)
 VALUES ('testuser1', 'testuser2', true),

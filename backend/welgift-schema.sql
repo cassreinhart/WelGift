@@ -18,10 +18,9 @@ CREATE TABLE friendships (
 );
 
 CREATE TABLE wishlists (
-  wishlist_id INTEGER PRIMARY KEY,
-  CONSTRAINT username
-    FOREIGN KEY(username)
-        REFERENCES users(username),
+  wishlist_id INTEGER,
+  username VARCHAR(25)
+    REFERENCES users(username),
   item_name TEXT NOT NULL,
   link_to_item weburl NOT NULL
 );
