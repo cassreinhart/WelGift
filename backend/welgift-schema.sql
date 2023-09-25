@@ -23,3 +23,10 @@ CREATE TABLE wishlists (
   item_name TEXT NOT NULL,
   link_to_item weburl NOT NULL
 );
+
+-- CREATE TABLE items (
+--   wishlist_id INTEGER
+--     REFERENCES wishlists(wishlist_id), 
+--   item_name TEXT NOT NULL,
+--   link_to_item weburl NOT NULL
+-- )
