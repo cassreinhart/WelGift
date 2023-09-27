@@ -133,7 +133,8 @@ class User {
             AND approved = $2`,
         [username, true]
         )
-
+        
+        // user.firstName = user.fullName.split(" ")
         user.wishlists = userWishlist.rows.map(w => w.wishlist_id);
         user.friends = [...friendRes1, ...friendRes2]
 
@@ -207,7 +208,7 @@ class User {
             [true, currentUser, otherUser]
         )
         
-        
+        return result.rows[0]
     }
 }
 
