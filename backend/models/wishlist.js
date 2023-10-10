@@ -2,52 +2,70 @@
 
 const db = require("../db");
 
-const { sqlForPartialUpdate } = require("../helpers/sql");
 const {
-  BadRequestError,
+  BadRequestError, ExpressError,
 } = require("../expressError");
 
 const { link } = require("fs");
 
 class Wishlist {
-    static async addItemToWishlist(wishlistId, username, itemName, linkToItem) {
+    static async createNewWishlist(username) {
         const result = db.query(
             `INSERT INTO wishlists
+            WHERE username = $1`,
+        [username]
+        )
+        if (!result.rows[0]) throw new ExpressError("Could not create a wishlist.")
+        return result.rows[0]
+    }
+
+    //update to remove username
+    static async addItemToWishlist(wishlistId, itemName, linkToItem) {
+        const result = db.query(
+            `INSERT INTO items
             SET 
                 username = $1,
                 item_name = $2,
                 link_to_item = $3
             WHERE wishlist_id = $4
+            RETURNING 
+                item_name AS "itemName",
+                link_to_item AS "linkToItem",
+                gifted
             `,
-        [username, itemName, linkToItem, wishlistId]
+        [itemName, linkToItem, wishlistId]
         )
 
-        if (!result.rows[0]) throw new BadRequestError("Missing Information.")
+        if (!result.rows[0]) throw new BadRequestError("Could not add item to wishlist.")
         return result.rows[0];
     }
 
-    static async removeItemFromWishlist(wishlistId, itemName) {
+    static async removeItemFromWishlist(itemId) {
         const result = db.query(
-            `DELETE FROM wishlists
-            WHERE wishlist_id = $1
-            AND item_name = $2
+            `DELETE FROM items
+            WHERE item_id = $1
             `,
-        [wishlistId, itemName]
+        [itemId]
         )
 
-        if (!result.rows[0]) throw new BadRequestError("Missing Information.")
-        return "Item deleted."
+        if (!result.rows[0]) throw new BadRequestError("Could not remove item from wishlist.")
     }
     
-    static async markAsGifted(wishlistId) {
+    static async markAsGifted(itemId) {
         const result = db.query(
-            `UPDATE wishlists
+            `UPDATE items
             SET gifted = $1
-            WHERE wishlist_id = $2`,
-            [true, wishlistId]
+            WHERE item_id = $2
+            RETURNING 
+                    item_id AS "itemId",
+                    item_name AS "itemName",
+                    link_to_item AS "linkToItem",
+                    gifted
+            `,
+            [true, itemId]
         )
 
-        if (!result.rows[0]) throw new BadRequestError("Try again.")
+        if (!result.rows[0]) throw new NotFoundError(`No such item: ${itemName}`)
         return "Item has been marked as gifted!"
     }
 }

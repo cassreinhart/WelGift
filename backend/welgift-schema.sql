@@ -19,8 +19,14 @@ CREATE TABLE friendships (
 CREATE TABLE wishlists (
   wishlist_id INTEGER,
   username VARCHAR(25)
-    REFERENCES users(username) ON DELETE CASCADE,
+    REFERENCES users(username) ON DELETE CASCADE
+);
+
+CREATE TABLE items (
+  item_id INTEGER PRIMARY KEY,
+  wishlist_id INTEGER 
+    REFERENCES wishlists(wishlist_id) ON DELETE CASCADE,
   item_name TEXT NOT NULL,
   link_to_item weburl NOT NULL
   gifted BOOLEAN DEFAULT false
-);
+)

@@ -5,11 +5,11 @@
 const jsonschema = require("jsonschema");
 
 const express = require("express");
-const { ensureCurrentUser, ensureLoggedIn, ensureCurrentUser, ensureCurrentUserOrAreFriends } = require("../middleware/auth");
+const { ensureCurrentUser, ensureLoggedIn, ensureCurrentUserOrAreFriends } = require("../middleware/auth");
 const { BadRequestError } = require("../expressError");
 const User = require("../models/user");
 const Wishlist = require("../models/wishlist")
-const userUpdateSchema = require("../schemas/userUpdate.json");
+// const userUpdateSchema = require("../schemas/userUpdate.json");
 
 const router = express.Router();
 
@@ -80,12 +80,24 @@ router.delete("/:username", ensureLoggedIn, ensureCurrentUser, async function (r
 router.post("/:username/wishlists/:id", ensureCurrentUser, async function (req, res, next) {
   try {
     const wishlistId = +req.params.id
-    await Wishlist.addItemToWishlist()
+    const username = req.params.username
+    const itemName = req.body.itemName;
+    const linkToItem = req.body.linkToItem;
+    await Wishlist.addItemToWishlist(wishlistId, username, itemName, linkToItem)
     return res.json({applied: jobId})
   } catch (err) {
     return next(err)
   }
 })
 
+router.patch("/:username/wishlists/:id", ensureCurrentUserOrAreFriends, async function(req, res, next) {
+    try {
+        const itemId = +req.body.itemId;
+        await Wishlist.markAsGifted(itemId)
+        return res.json({itemName: gifted})
+    } catch (err) {
+        return next(err)
+    }
+})
 
 module.exports = router;
