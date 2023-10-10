@@ -4,7 +4,7 @@ CHECK (VALUE ~ '^https?:\/\/[-a-zA-Z0-9@:%._\+~#=]{2,255}\.[a-z]{2,6}(\/[-a-zA-Z
 COMMENT ON DOMAIN weburl IS 'match URLs (http or https)';
 
 CREATE TABLE users (
-  username VARCHAR(25) PRIMARY KEY,
+  username VARCHAR(25) PRIMARY KEY UNIQUE,
   hashed_password TEXT NOT NULL,
   full_name TEXT NOT NULL
 );
@@ -19,14 +19,8 @@ CREATE TABLE friendships (
 CREATE TABLE wishlists (
   wishlist_id INTEGER,
   username VARCHAR(25)
-    REFERENCES users(username),
+    REFERENCES users(username) ON DELETE CASCADE,
   item_name TEXT NOT NULL,
   link_to_item weburl NOT NULL
+  gifted BOOLEAN DEFAULT false
 );
-
--- CREATE TABLE items (
---   wishlist_id INTEGER
---     REFERENCES wishlists(wishlist_id), 
---   item_name TEXT NOT NULL,
---   link_to_item weburl NOT NULL
--- )

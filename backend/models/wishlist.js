@@ -40,7 +40,15 @@ class Wishlist {
     }
     
     static async markAsGifted(wishlistId) {
+        const result = db.query(
+            `UPDATE wishlists
+            SET gifted = $1
+            WHERE wishlist_id = $2`,
+            [true, wishlistId]
+        )
 
+        if (!result.rows[0]) throw new BadRequestError("Try again.")
+        return "Item has been marked as gifted!"
     }
 }
 

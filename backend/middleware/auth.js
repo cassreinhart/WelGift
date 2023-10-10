@@ -57,8 +57,19 @@ function ensureCurrentUser(req, res, next) {
   } 
 }
 
+async function ensureCurrentUserOrAreFriends(req, res, next) {
+    try {
+        const areFriends = await User.checkForFriendship(res.locals.user.username, req.params.username)
+        if (!areFriends || res.locals.user.username !== req.params.username) throw new UnauthorizedError();
+        return next();
+    } catch(err) {
+        return next(err);
+    }
+}
+
 module.exports = {
   authenticateJWT,
   ensureLoggedIn,
-  ensureCurrentUser
+  ensureCurrentUser,
+  ensureCurrentUserOrAreFriends
 };

@@ -143,17 +143,17 @@ class User {
 
     static async checkForFriendship(currentUser, otherUser) {
         const result1 = await db.query(
-            `SELECT request_to_username
+            `SELECT approved
             WHERE request_from_username = $1
-            AND approved = $2`,
-        [currentUser, true]
+            AND request_to_username = $2`,
+        [currentUser, otherUser]
         )
 
         const result2 = await db.query(
-            `SELECT request_from_username
+            `SELECT approved
             WHERE request_to_username = $1
-            AND approved = $2`,
-        [currentUser, true]
+            AND request_from_username = $2`,
+        [currentUser, otherUser]
         )
 
         if (!result1.rows[0] && !result2.rows[0]) throw new UnauthorizedError('Friendship not approved.')
